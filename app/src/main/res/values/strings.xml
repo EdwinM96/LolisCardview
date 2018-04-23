@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">LolisCardview</string>
+    <string name="title">LaboRecyclerView</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
