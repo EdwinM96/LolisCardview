@@ -1,17 +1,29 @@
 package com.example.max00.loliscardview.Fragments;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.example.max00.loliscardview.Adapters.RecyclerViewAdapter_cardview;
 import com.example.max00.loliscardview.R;
 import com.example.max00.loliscardview.Classes.Lolis;
 
 import java.util.ArrayList;
+import java.util.logging.Handler;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,7 +43,7 @@ public class TabFragment extends Fragment {
     private ArrayList<Lolis> lista;
     private boolean fav;
     private Context context;
-
+    private SwipeRefreshLayout swipeRefreshLayout;
     private OnFragmentInteractionListener mListener;
 
     public TabFragment() {
@@ -69,25 +81,48 @@ public class TabFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tab, container, false);
+        View v = inflater.inflate(R.layout.fragment_tab, container, false);
+        swipeRefreshLayout = v.findViewById(R.id.swiper);
+        RecyclerView recyclerView = v.findViewById(R.id.recycler_view_tab2);
+        recyclerView.setAdapter(new RecyclerViewAdapter_cardview(lista) {
+            public void onFavClick(CompoundButton buttonView, boolean isChecked) {
+                //mListener.onFragmentInteraction(buttonView,isChecked);
+            }
+        });
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        return v;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable final Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                initiateRefresh();
+            }
+        });
     }
+
+
+    // TODO: Rename method, update argument and hook method into UI event
+    /*public void onButtonPressed(CompoundButton buttonView, boolean isChecked) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(CompoundButton buttonView, boolean isChecked);
+        }
+    }*/
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
+        this.context = context;
+        /*if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
-        }
+        }*/
     }
 
     @Override
@@ -108,6 +143,19 @@ public class TabFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onFragmentInteraction(CompoundButton buttonView, boolean isChecked);
+    }
+
+    private void initiateRefresh() {
+        newInstance(lista,true);
+        lista.remove(0);
+
+
+        new android.os.Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        },3000);
     }
 }

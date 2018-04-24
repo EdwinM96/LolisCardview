@@ -56,7 +56,7 @@ public abstract class RecyclerViewAdapter_cardview extends RecyclerView.Adapter<
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Log.d("Vlao",isChecked + "");
+                Log.d("se apreta",isChecked + "");
                 onFavClick(buttonView,isChecked);
             }
         });
