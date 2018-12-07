@@ -69,8 +69,6 @@ public class MainActivity extends AppCompatActivity implements TabFragment.OnFra
             viewPagerAdapter.notifyDataSetChanged();
         }
         else if(!a){
-            //LolisArrayList.get(pos).setaBoolean(a);
-            //LolisFavorites.remove(pos);
             LolisArrayList.get(LolisArrayList.indexOf(LolisFavorites.get(pos))).setaBoolean(a);
             LolisFavorites.remove(pos);
             viewPagerAdapter.notifyDataSetChanged();
