@@ -56,6 +56,9 @@ public class TabFragment extends Fragment {
         // Required empty public constructor
     }
 
+    public RecyclerViewAdapter_cardview getAdapter() {
+        return adapter;
+    }
 
     /**
      * Use this factory method to create a new instance of
@@ -96,24 +99,19 @@ public class TabFragment extends Fragment {
                 @Override
                 public void onFavClick(boolean b, int position) {
                     mListener.onFragmentInteraction(b,position);
+                    adapter.notifyDataSetChanged();
                 }
             };
-            adapter.notifyDataSetChanged();
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
             recyclerView.setAdapter(adapter);
-        } else if(fav){
+        } if(fav){
             adapter = new RecyclerViewAdapter_cardview(lista) {
                 @Override
                 public void onFavClick(boolean b, int position) {
                     mListener.onFragmentInteraction(b,position);
-                    if(!b){
-                        adapter.notifyItemRemoved(position);
-                        adapter.notifyItemRangeChanged(position,lista.size());
-                        adapter.notifyDataSetChanged();
-                    }
+                    adapter.notifyDataSetChanged();
                 }
             };
-            adapter.notifyDataSetChanged();
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
             recyclerView.setAdapter(adapter);
         }

@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity implements TabFragment.OnFra
     private ArrayList<Lolis> LolisArrayList;
     private ArrayList<Lolis> LolisFavorites;
     private FragmentManager fragmentManager;
+    private TabFragment tabFragment;
 
 
     @Override
@@ -64,10 +65,12 @@ public class MainActivity extends AppCompatActivity implements TabFragment.OnFra
         if(a){
             LolisArrayList.get(pos).setaBoolean(a);
             LolisFavorites.add(LolisArrayList.get(pos));
+            viewPagerAdapter.notifyDataSetChanged();
         }
         else if(!a){
             LolisArrayList.get(pos).setaBoolean(a);
             LolisFavorites.remove(pos);
+            viewPagerAdapter.notifyDataSetChanged();
         }
     }
 

@@ -20,7 +20,6 @@ import java.util.ArrayList;
 public abstract class RecyclerViewAdapter_cardview extends RecyclerView.Adapter<RecyclerViewAdapter_cardview.LolisViewHolder>{
 
     private ArrayList<Lolis> lolis;
-    private int pos;
 
     public abstract void onFavClick(boolean b, int position);
 
@@ -51,15 +50,15 @@ public abstract class RecyclerViewAdapter_cardview extends RecyclerView.Adapter<
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final LolisViewHolder holder, int position) {
-        pos = holder.getAdapterPosition();
+    public void onBindViewHolder(@NonNull final LolisViewHolder holder, final int position) {
         holder.name.setText(lolis.get(position).getNombre());
         holder.img.setImageResource(lolis.get(position).getImg());
         holder.checkBox.setChecked(lolis.get(position).getaBoolean());
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                onFavClick(b, pos);
+                onFavClick(b, position);
+                //notifyDataSetChanged();
             }
         });
     }
