@@ -99,7 +99,7 @@ public class TabFragment extends Fragment {
                 @Override
                 public void onFavClick(boolean b, int position) {
                     mListener.onFragmentInteraction(b,position);
-                    adapter.notifyDataSetChanged();
+                    //adapter.notifyDataSetChanged();
                 }
             };
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -109,7 +109,7 @@ public class TabFragment extends Fragment {
                 @Override
                 public void onFavClick(boolean b, int position) {
                     mListener.onFragmentInteraction(b,position);
-                    adapter.notifyDataSetChanged();
+                    //adapter.notifyDataSetChanged();
                 }
             };
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
