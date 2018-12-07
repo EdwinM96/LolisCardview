@@ -1,5 +1,6 @@
 package com.example.max00.loliscardview.Fragments;
 
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -18,6 +19,7 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.example.max00.loliscardview.Activities.OnCheckBoxClickListener;
 import com.example.max00.loliscardview.Adapters.RecyclerViewAdapter_cardview;
 import com.example.max00.loliscardview.R;
 import com.example.max00.loliscardview.Classes.Lolis;
@@ -41,14 +43,19 @@ public class TabFragment extends Fragment {
 
     // TODO: Rename and change types of parameters
     private ArrayList<Lolis> lista;
+    private ArrayList<Lolis> favorites;
     private boolean fav;
     private Context context;
-    private SwipeRefreshLayout swipeRefreshLayout;
+    private RecyclerView recyclerView;
+    private RecyclerViewAdapter_cardview adapter;
+    //private SwipeRefreshLayout swipeRefreshLayout;
     private OnFragmentInteractionListener mListener;
+    //private OnCheckBoxClickListener listener;
 
     public TabFragment() {
         // Required empty public constructor
     }
+
 
     /**
      * Use this factory method to create a new instance of
@@ -82,27 +89,48 @@ public class TabFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_tab, container, false);
-        swipeRefreshLayout = v.findViewById(R.id.swiper);
-        RecyclerView recyclerView = v.findViewById(R.id.recycler_view_tab2);
-        recyclerView.setAdapter(new RecyclerViewAdapter_cardview(lista) {
-            public void onFavClick(CompoundButton buttonView, boolean isChecked) {
-                //mListener.onFragmentInteraction(buttonView,isChecked);
-            }
-        });
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        //swipeRefreshLayout = v.findViewById(R.id.swiper);
+        recyclerView = v.findViewById(R.id.recycler_view_tab2);
+        if(!fav){
+            adapter = new RecyclerViewAdapter_cardview(lista) {
+                @Override
+                public void onFavClick(boolean b, int position) {
+                    mListener.onFragmentInteraction(b,position);
+                }
+            };
+            adapter.notifyDataSetChanged();
+            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+            recyclerView.setAdapter(adapter);
+        } else if(fav){
+            adapter = new RecyclerViewAdapter_cardview(lista) {
+                @Override
+                public void onFavClick(boolean b, int position) {
+                    mListener.onFragmentInteraction(b,position);
+                    if(!b){
+                        adapter.notifyItemRemoved(position);
+                        adapter.notifyItemRangeChanged(position,lista.size());
+                        adapter.notifyDataSetChanged();
+                    }
+                }
+            };
+            adapter.notifyDataSetChanged();
+            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+            recyclerView.setAdapter(adapter);
+        }
         return v;
+
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        /*swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 initiateRefresh();
             }
-        });
+        });*/
     }
 
 
@@ -116,19 +144,22 @@ public class TabFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
         this.context = context;
-        /*if (context instanceof OnFragmentInteractionListener) {
+        if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
+            //listener = (OnCheckBoxClickListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
-        }*/
+        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        //listener = null;
     }
 
     /**
@@ -143,11 +174,11 @@ public class TabFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(CompoundButton buttonView, boolean isChecked);
+        void onFragmentInteraction(boolean a, int pos);
     }
 
-    private void initiateRefresh() {
-        newInstance(lista,true);
+    /*private void initiateRefresh() {
+        newInstance(lista);
         lista.remove(0);
 
 
@@ -157,5 +188,16 @@ public class TabFragment extends Fragment {
                 swipeRefreshLayout.setRefreshing(false);
             }
         },3000);
-    }
+    }*/
+
+    /*private void Lolis(final RecyclerView recyclerView){
+        adapter = new RecyclerViewAdapter_cardview(lista) {
+            @Override
+            public void onFavClick(boolean b, int position) {
+                mListener.onFragmentInteraction(b,position);
+            }
+        };
+        adapter.notifyDataSetChanged();
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+    }*/
 }

@@ -37,4 +37,6 @@ public class Lolis implements Serializable{
     public void setaBoolean(boolean aBoolean) {
         this.aBoolean = aBoolean;
     }
+
+
 }
